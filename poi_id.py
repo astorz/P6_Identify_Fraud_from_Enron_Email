@@ -1,9 +1,6 @@
 #!/usr/bin/python
-# import os
-# os.chdir('/Users/Andreas/Documents/Andreas/MOOCs/Nanodegree/04_MachineLearning/ud120-projects/final_project')
 import sys
 import pickle
-# sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
@@ -11,13 +8,13 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
+
 features_list = [
 'poi',
 'salary',
  'exercised_stock_options',
  'bonus'
  ]
-
 
 
 ### Load the dictionary containing the dataset
@@ -30,39 +27,32 @@ data_dict.pop("TOTAL", 0)
 data_dict.pop("THE TRAVEL AGENCY IN THE PARK", 0)
 
 ### Task 3: Create new feature(s)
-# def computeFraction( poi_messages, all_messages ):
-#    
-#     if poi_messages == "NaN" or all_messages == "NaN":
-#         fraction = 0.
-#     else:
-#         fraction = float(poi_messages)/all_messages
-#
-#     return fraction
-#
-# for name in data_dict:
-#
-#     data_point = data_dict[name]
-#
-#     from_poi_to_this_person = data_point["from_poi_to_this_person"]
-#     to_messages = data_point["to_messages"]
-#     fraction_from_poi = computeFraction( from_poi_to_this_person, to_messages )
-#     data_point["fraction_from_poi"] = fraction_from_poi
-#
-#
-#     from_this_person_to_poi = data_point["from_this_person_to_poi"]
-#     from_messages = data_point["from_messages"]
-#     fraction_to_poi = computeFraction( from_this_person_to_poi, from_messages )
-#     data_point["fraction_to_poi"] = fraction_to_poi
+def computeFraction( poi_messages, all_messages ):
+   
+    if poi_messages == "NaN" or all_messages == "NaN":
+        fraction = 0.
+    else:
+        fraction = float(poi_messages)/all_messages
 
-# features_list = [
-# 'poi',
-# 'salary',
-#  'total_payments',
-#  'exercised_stock_options',
-#  'bonus'
-# 'fraction_from_poi',
-# 'fraction_to_poi'
-#  ]
+    return fraction
+
+def calcFractionToPOI():
+
+	for name in data_dict:
+
+		data_point = data_dict[name]
+
+		from_poi_to_this_person = data_point["from_poi_to_this_person"]
+		to_messages = data_point["to_messages"]
+		fraction_from_poi = computeFraction( from_poi_to_this_person, to_messages )
+		data_point["fraction_from_poi"] = fraction_from_poi
+
+
+		from_this_person_to_poi = data_point["from_this_person_to_poi"]
+		from_messages = data_point["from_messages"]
+		fraction_to_poi = computeFraction( from_this_person_to_poi, from_messages )
+		data_point["fraction_to_poi"] = fraction_to_poi
+
 
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
@@ -86,7 +76,6 @@ knn = KNeighborsClassifier()
 parameters = {'n_neighbors': [4,6,8,10]}
 clf = GridSearchCV(knn, param_grid=parameters, cv=skf)
 clf.fit(features,labels)
-# print clf.best_estimator_
 
 clf = KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_neighbors=4, p=2, weights='distance')
 
